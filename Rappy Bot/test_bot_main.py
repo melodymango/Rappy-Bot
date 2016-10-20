@@ -1,33 +1,53 @@
 '''
 This is a learning experience!!
+
+TO-DO:
+[!piyo] command. Will show the "piyo piyo" symbol art from PSO2. 
+
+CURRENT BUGS:
+1) send_hug() will mention the wrong user if there are two or more users with the same username/nickname on the server
+
 '''
 
 import discord
 import random
 import re
 
+#create client object
 client = discord.Client()
+
 
 def test_result(message):
     return 'I hear you, {0.author.mention}!'.format(message)
      
+#Triggered by !help. 
+#Shows a list of commands available for users to use with Rappy. Does not include secret commands like !fuckyou and !piyo     
 def provide_help():
     msg = ("Piyo piyo~ :musical_note: I'm Rappy! Here's what I can do so far:\n\n"
            "`test` - I'll reply! Handy for testing your connection.\n"
            "`!choice: a, b, ..., z` - Need to decide between at least 2 different things? I can do it for you!\n"
-           "`!hug` - Need a hug? I'll hug you back! :hearts: \n")
+           "`!hug <optional_username> ` - Need a hug? I'll hug you back! Or you can have me hug someone else! :hearts: \n")
     return msg  
 
+#Triggered by !hug <optional_user_name>
+#Gives a hug to you if no username is provided, otherwise will hug a specified user.
 def send_hug(message):
     if message.content == '!hug':
-        return 'http://blog-imgs-88.fc2.com/p/s/o/pso2ship10sun/pso20160201_155126_023_ss.jpg'
+        return '{0.author.mention}\nhttp://blog-imgs-88.fc2.com/p/s/o/pso2ship10sun/pso20160201_155126_023_ss.jpg'.format(message)
+    #Will not work correctly if there are two or more users sharing the same nickname/username
     else:
         user_name = message.content[4:].strip()
-        return '{}\nhttp://blog-imgs-88.fc2.com/p/s/o/pso2ship10sun/pso20160201_155126_023_ss.jpg'.format(user_name)
-
+        if client.get_server('126513229588332544').get_member_named(user_name) != None:
+            return '{}\nhttp://blog-imgs-88.fc2.com/p/s/o/pso2ship10sun/pso20160201_155126_023_ss.jpg'.format(client.get_server('126513229588332544').get_member_named(user_name).mention)
+        else:
+            return "There's no one by that name I can hug! QvQ"
+#Triggered by !fuckyou
+#Why are you so mean to Rappy? 
 def fuck_you(message):
     return 'Fuck you too, {0.author.mention}!'.format(message)  
 
+#Triggered by !choice a, b, ..., z 
+#Randomly selects a choice from the given options.
 def choice(message):
     print('choice called')
     try:
@@ -40,7 +60,8 @@ def choice(message):
         return choice_list[random.randint(0, len(choice_list) - 1)]
     except:
         return "You didn't format this command right! It's `!choice: a, b, ..., z`!"
-    
+
+#Rappy is always listening for your commands.
 @client.async_event
 def on_message(message):
     # we do not want the bot to reply to itself
@@ -51,6 +72,8 @@ def on_message(message):
     elif message.content == '!help':
         yield from client.send_message(message.channel, provide_help()) 
     elif message.content == '!fuckyou':
+        yield from client.send_message(message.channel, fuck_you(message))
+    elif message.content == '!piyo':
         yield from client.send_message(message.channel, fuck_you(message))
     elif message.content.startswith('!hug'):
         yield from client.send_message(message.channel, send_hug(message))
@@ -65,8 +88,6 @@ def on_ready():
     print(client.user.id)
     print('------')
     #yield from client.send_message(client.get_channel('126513229588332544'), "I'm online now, piyo!")
-    for member in client.get_server('126513229588332544'):
-        print(member.)
 
 client.run('MjM2NTIxODYyMzUwMjQxNzky.CuKV2g.BFu_dRkgcNJUfdcAXpwTsp3SDuE')
 
