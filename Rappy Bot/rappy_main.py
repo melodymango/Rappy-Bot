@@ -2,11 +2,13 @@
 This is a learning experience!!
 
 TO-DO:
-[!piyo] command. Will show the "piyo piyo" symbol art from PSO2. 
+1) [!piyo] command. Will show the "piyo piyo" symbol art from PSO2. 
 
 CURRENT BUGS:
 1) send_hug() will not work if @everyone or @here is called
 
+STUFF THAT WOULD BE NICE BUT NOT NEEDED:
+1) rewrite choice() to make use of regex to check text. Not sure if this will make its code look like less of a mess
 '''
 
 import discord
@@ -32,7 +34,8 @@ def provide_help():
     msg = ("Piyo piyo~ :musical_note: I'm Rappy! Here's what I can do so far:\n\n"
            "`test` - I'll reply! Handy for testing your connection.\n"
            "`!choice: a, b, ..., z` - Need to decide between at least 2 different things? I can do it for you!\n"
-           "`!hug <@optional_usernames> ` - Need a hug? I'll hug you back! Or you can have me hug someone else! :hearts: \n")
+           "`!hug <@optional_usernames>` - Need a hug? I'll hug you back! Or you can have me hug someone else! :hearts: \n"
+           "`!lenny <x[any number that won't make discord explode]>` - ( ͡° ͜ʖ ͡°)")
     return msg  
 
 #Triggered by '!hug <optional_user_name>'
@@ -68,7 +71,6 @@ def lenny(message):
 #Triggered by '!choice a, b, ..., z '
 #Randomly selects a choice from the given options.
 def choice(message):
-    print('choice called')
     try:
         if message.content.find(':') == -1 or message.content.find(':') > 7:
             raise Exception("Format Error")
