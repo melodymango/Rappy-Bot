@@ -15,12 +15,14 @@ import re
 
 #create client object
 client = discord.Client()
+rappy_hug = 'http://blog-imgs-88.fc2.com/p/s/o/pso2ship10sun/pso20160201_155126_023_ss.jpg'
 
-
+#Triggered by 'test'
+#Just a way of making sure Rappy can hear you/seeing if you're still connected to the server
 def test_result(message):
     return 'I hear you, {0.author.mention}!'.format(message)
      
-#Triggered by !help. 
+#Triggered by '!help'. 
 #Shows a list of commands available for users to use with Rappy. Does not include secret commands like !fuckyou and !piyo     
 def provide_help():
     msg = ("Piyo piyo~ :musical_note: I'm Rappy! Here's what I can do so far:\n\n"
@@ -29,24 +31,25 @@ def provide_help():
            "`!hug <optional_username> ` - Need a hug? I'll hug you back! Or you can have me hug someone else! :hearts: \n")
     return msg  
 
-#Triggered by !hug <optional_user_name>
+#Triggered by '!hug <optional_user_name>'
 #Gives a hug to you if no username is provided, otherwise will hug a specified user.
 def send_hug(message):
     if message.content == '!hug':
-        return '{0.author.mention}\nhttp://blog-imgs-88.fc2.com/p/s/o/pso2ship10sun/pso20160201_155126_023_ss.jpg'.format(message)
+        return '{0.author.mention}\n'.format(message) + rappy_hug
     #Will not work correctly if there are two or more users sharing the same nickname/username
     else:
         user_name = message.content[4:].strip()
         if client.get_server('126513229588332544').get_member_named(user_name) != None:
-            return '{}\nhttp://blog-imgs-88.fc2.com/p/s/o/pso2ship10sun/pso20160201_155126_023_ss.jpg'.format(client.get_server('126513229588332544').get_member_named(user_name).mention)
+            return '{}\n'.format(client.get_server('126513229588332544').get_member_named(user_name).mention) + rappy_hug
         else:
             return "There's no one by that name I can hug! QvQ"
-#Triggered by !fuckyou
+        
+#Triggered by '!fuckyou'
 #Why are you so mean to Rappy? 
 def fuck_you(message):
     return 'Fuck you too, {0.author.mention}!'.format(message)  
 
-#Triggered by !choice a, b, ..., z 
+#Triggered by '!choice a, b, ..., z '
 #Randomly selects a choice from the given options.
 def choice(message):
     print('choice called')
