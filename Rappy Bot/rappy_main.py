@@ -1,8 +1,20 @@
 '''
 This is a learning experience!!
+(AKA a work in progress)
+
+BASIC DESCRIPTION:
+A bot named after the Rappy, a strange but cute yellow bird from Phantasy Star Online 2.
+Its purpose is to enhance a server's chat experience. 
+    - Users can use commands such as !lenny to quickly display copypastas
+    - Users can use commands to quickly display various reaction pictures
+
 
 TO-DO:
-1) [!piyo] command. Will show the "piyo piyo" symbol art from PSO2. 
+1) Tic-Tac-Toe minigame??
+2) Allow users to create custom commands??
+    - could save custom commands in a text file, and load every time Rappy goes online
+    - text file would store commands on a per-server basis
+    - can eval() work for this?? 
 
 CURRENT BUGS:
 1) send_hug() will not work if @everyone or @here is called
@@ -18,28 +30,28 @@ import re
 #create client object
 client = discord.Client()
 
-#global variables
-rappy_hug = 'http://blog-imgs-88.fc2.com/p/s/o/pso2ship10sun/pso20160201_155126_023_ss.jpg'
-my_server = '126513229588332544'
+#Constants, usually permanent links to pictures or copypasta text
+rappy_hug = 'http://i.imgur.com/lFFmYEr.jpg' #for hug()
+piyo_piyo = 'http://i.imgur.com/f944DUA.png' #for piyo()
 
-
-#Triggered by 'test'
+#Invoked by 'test'
 #Just a way of making sure Rappy can hear you/seeing if you're still connected to the server
 def test_result(message):
     return 'I hear you, {0.author.mention}!'.format(message)
      
-#Triggered by '!help'. 
+#Invoked by '!help'. 
 #Shows a list of commands available for users to use with Rappy. Does not include secret commands like !fuckyou and !piyo     
 def provide_help():
     msg = ("Piyo piyo~ :musical_note: I'm Rappy! Here's what I can do so far:\n\n"
            "`test` - I'll reply! Handy for testing your connection.\n"
            "`!choice: a, b, ..., z` - Need to decide between at least 2 different things? I can do it for you!\n"
            "`!hug <@optional_usernames>` - Need a hug? I'll hug you back! Or you can have me hug someone else! :hearts: \n"
-           "`!lenny <x[any number that won't make discord explode]>` - ( ͡° ͜ʖ ͡°)")
+           "`!lenny <x[any number that won't make Discord explode]>` - ( ͡° ͜ʖ ͡°)")
     return msg  
 
-#Triggered by '!hug <optional_user_name>'
-#Gives a hug to you if no username is provided, otherwise will hug a specified user.
+#Invoked by '!hug <@optional_user_names>'
+#If no username is provided, gives a hug to you (via tagging you in a very cute picture of Emperappy).
+#Otherwise will hug a specified user(s).
 def send_hug(message):
     if message.content.strip() == '!hug':
         return '{0.author.mention}\n'.format(message) + rappy_hug
@@ -51,13 +63,18 @@ def send_hug(message):
             output += (member.mention + ' ')
         return '{}\n'.format(output) + rappy_hug
         
-#Triggered by '!fuckyou'
+#Invoked by '!piyo'
+#Tags the user who invoked !piyo with the 'piyo piyo' symbol art from PSO2.    
+def piyo(message):
+    return '{0.author.mention}\n'.format(message) + piyo_piyo 
+        
+#Invoked by '!fuckyou'
 #Why are you so mean to Rappy? 
 def fuck_you(message):
     return 'Fuck you too, {0.author.mention}!'.format(message)  
 
-#Triggered by '!lenny'
-#Returns everone's favorite emoticon
+#Invoked by '!lenny'
+#Returns everone's favorite emoticon: the lenny face
 def lenny(message):
     lenny_true = re.match('^!lenny( x(\d+))?$', message.content)
     if lenny_true:
@@ -66,9 +83,9 @@ def lenny(message):
         else:
             return '( ͡° ͜ʖ ͡°)'
     else:
-        return 'ABORT ABORT!!!'
+        return '( ͠° ͟ʖ ͡°)'
 
-#Triggered by '!choice a, b, ..., z '
+#Invoked by '!choice a, b, ..., z '
 #Randomly selects a choice from the given options.
 def choice(message):
     try:
@@ -95,7 +112,7 @@ def on_message(message):
     elif message.content == '!fuckyou':
         yield from client.send_message(message.channel, fuck_you(message))
     elif message.content == '!piyo':
-        yield from client.send_message(message.channel, fuck_you(message))
+        yield from client.send_message(message.channel, piyo(message))
     elif message.content.startswith('!hug'):
         yield from client.send_message(message.channel, send_hug(message))
     elif message.content.startswith('!choice'):
@@ -110,7 +127,8 @@ def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
-    #yield from client.send_message(client.get_channel('126513229588332544'), "I'm online now, piyo!")
+#    for server in client.servers:
+#        yield from client.send_message(server.default_channel, "I'm online now, piyo!")
 
 client.run('MjM2NTIxODYyMzUwMjQxNzky.CuKV2g.BFu_dRkgcNJUfdcAXpwTsp3SDuE')
 
