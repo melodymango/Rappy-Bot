@@ -26,6 +26,7 @@ STUFF THAT WOULD BE NICE BUT NOT NEEDED:
 import discord
 import random
 import re
+import custom_commands
 
 #create client object
 client = discord.Client()
@@ -43,6 +44,7 @@ def test_result(message):
 #Shows a list of commands available for users to use with Rappy. Does not include secret commands like !fuckyou and !piyo     
 def provide_help():
     msg = ("Piyo piyo~ :musical_note: I'm Rappy! Here's what I can do so far:\n\n"
+           "**NOTE: <> indicates optional command arguments.**\n"
            "`test` - I'll reply! Handy for testing your connection.\n"
            "`!choice: a, b, ..., z` - Need to decide between at least 2 different things? I can do it for you!\n"
            "`!hug <@optional_usernames>` - Need a hug? I'll hug you back! Or you can have me hug someone else! :hearts: \n"
@@ -119,6 +121,8 @@ def on_message(message):
         yield from client.send_message(message.channel, choice(message))
     elif message.content.startswith('!lenny'):
         yield from client.send_message(message.channel, lenny(message))
+    elif message.content.startswith('!newcommand'):
+        yield from client.send_message(message.channel, custom_commands.new_command(message))
 
 
 @client.async_event
