@@ -9,12 +9,11 @@ Its purpose is to enhance a server's chat experience.
     - Users can use commands to quickly display various reaction pictures
 
 
-TO-DO:
+TODO:
 1) Tic-Tac-Toe minigame??
 2) Allow users to create custom commands??
     - could save custom commands in a text file, and load every time Rappy goes online
     - text file would store commands on a per-server basis
-    - can eval() work for this?? 
 
 CURRENT BUGS:
 1) send_hug() will not work if @everyone or @here is called
